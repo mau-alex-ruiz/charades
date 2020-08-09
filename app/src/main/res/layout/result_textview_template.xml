@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <TextView
+        android:id="@+id/result_template"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:layout_gravity="fill_horizontal"
+        android:layout_columnWeight="1"
+        tools:text="Buffalo Wild Wings" />
+
+</layout>

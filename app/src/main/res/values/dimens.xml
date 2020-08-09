@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="category_card_margin">10dp</dimen>
+    <dimen name="category_card_height">160dp</dimen>
+    <dimen name="category_card_radius">10dp</dimen>
+    <dimen name="item_text">40sp</dimen>
+    <dimen name="result_item_text">20sp</dimen>
+
+</resources>

@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Charades</string>
+    <string name="pass">Pass! :)</string>
+    <string name="fail">Fail! :(</string>
+    <string name="back">&#x2190; Back</string>
+    <string name="place_on_forehead">Place the device on your forehead to start.</string>
+    <string name="get_ready">Get Ready&#8230;</string>
+</resources>

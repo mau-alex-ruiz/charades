@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/viewpager_container"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:background="@color/appThemeBlue"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+        <Button
+            android:id="@+id/back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:background="@android:color/transparent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="@string/back"
+            android:foreground="?android:attr/selectableItemBackground"/>
+
+        <TextView
+            android:id="@+id/timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:layout_marginTop="10dp"
+            android:textStyle="bold"
+            android:textSize="30sp"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <com.stradivarius.charades.ui.game.ItemContainerViewPager
+            android:id="@+id/item_viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent=".1"/>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent=".9"/>
+
+        <TextView
+            android:id="@+id/text_overlay"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/item_text"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:gravity="center_horizontal"
+            app:layout_constraintStart_toEndOf="@id/guide_start"
+            app:layout_constraintEnd_toStartOf="@id/guide_end"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
+
+
