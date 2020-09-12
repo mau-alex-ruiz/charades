@@ -1,8 +1,9 @@
-package com.stradivarius.charades.ui.game
+package com.stradivarius.charades.ui.game.container
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
+import com.stradivarius.charades.ui.game.item.ItemFragment
 
 class ItemPagerAdapter(
     fm: FragmentManager,

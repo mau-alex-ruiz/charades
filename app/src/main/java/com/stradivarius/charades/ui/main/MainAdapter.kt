@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.stradivarius.charades.databinding.CategoryCardViewBinding
-import com.stradivarius.charades.ui.game.ItemContainerActivity
+import com.stradivarius.charades.ui.game.container.ItemContainerActivity
 
 class MainAdapter(
     private val categoryList: List<Pair<String, List<String>>>

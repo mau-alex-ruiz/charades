@@ -1,4 +1,4 @@
-package com.stradivarius.charades.ui.game
+package com.stradivarius.charades.ui.game.container
 
 import android.content.Context
 import android.media.MediaPlayer

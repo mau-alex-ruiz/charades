@@ -5,6 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.stradivarius.charades.data.common.Model
 import com.stradivarius.charades.ui.common.BaseViewModel
+import com.stradivarius.charades.ui.game.container.ItemContainerViewModel
+import com.stradivarius.charades.ui.game.container.ItemContainerViewModelImpl
+import com.stradivarius.charades.ui.game.item.ItemViewModel
+import com.stradivarius.charades.ui.game.item.ItemViewModelImpl
 import com.stradivarius.charades.ui.main.MainViewModel
 import com.stradivarius.charades.ui.main.MainViewModelImpl
 
@@ -22,10 +26,11 @@ class ViewModelProviderFactoryImpl(
     ): V {
         val implClass = when (viewModelClass) {
             MainViewModel::class.java -> MainViewModelImpl::class.java
+            ItemContainerViewModel::class.java -> ItemContainerViewModelImpl::class.java
+            ItemViewModel::class.java -> ItemViewModelImpl::class.java
             else -> throw  IllegalArgumentException("ViewModel not found in ${this::class}")
         }
         return ViewModelProvider(fragment, this).get(implClass) as V
     }
-
 
 }

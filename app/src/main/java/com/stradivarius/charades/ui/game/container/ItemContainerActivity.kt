@@ -1,4 +1,4 @@
-package com.stradivarius.charades.ui.game
+package com.stradivarius.charades.ui.game.container
 
 import android.content.Context
 import android.content.Intent
@@ -12,16 +12,22 @@ import android.view.Surface.ROTATION_270
 import android.view.Surface.ROTATION_90
 import android.view.View
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.FragmentActivity
 import com.stradivarius.charades.R
+import com.stradivarius.charades.data.common.Model
 import com.stradivarius.charades.databinding.ItemContainerLayoutBinding
+import com.stradivarius.charades.ui.common.BaseFragmentActivity
+import com.stradivarius.charades.ui.common.BaseViewModel
+import com.stradivarius.charades.ui.common.BaseViewModelFragment
 import com.stradivarius.charades.ui.main.MainFragment
 import com.stradivarius.charades.ui.results.ResultsActivity
 import com.stradivarius.charades.ui.utils.Constants
 import com.stradivarius.charades.ui.utils.GameTimer
-import kotlin.math.roundToInt
-
+import com.stradivarius.charades.ui.utils.formatForDisplay
+import com.stradivarius.charades.ui.utils.toRadians
 
 class ItemContainerActivity : FragmentActivity(), SensorEventListener {
 
@@ -49,8 +55,23 @@ class ItemContainerActivity : FragmentActivity(), SensorEventListener {
 
     private val resultsList: MutableList<CharSequence> = mutableListOf()
 
+    private val countDownTimer: GameTimer = GameTimer(
+        timerLength = Constants.THREE_SECONDS,
+        interval = Constants.INTERVAL_ONE_SECOND,
+        onTickBlock = updateTime
+    ) {
+        boundLayout.apply {
+            textOverlay.visibility = View.GONE
+            itemViewpager.adapter = ItemPagerAdapter(
+                supportFragmentManager,
+                itemArray
+            )
+        }
+        listenForTilt = true
+        gameTimer.start()
+    }
+
     private val gameTimer: GameTimer = GameTimer(6000, Constants.INTERVAL_ONE_SECOND, updateTime) {
-        resultsList.add("${ResultsActivity.PREFIX_FAIL}.${itemArray[boundLayout.itemViewpager.currentItem]}")
         val intent = Intent(this, ResultsActivity::class.java).apply {
             putExtra(KEY_BUNDLE, Bundle().apply {
                 putCharSequenceArray(ResultsActivity.KEY_RESULTS_LIST, resultsList.toTypedArray())
@@ -74,6 +95,7 @@ class ItemContainerActivity : FragmentActivity(), SensorEventListener {
     override fun onBackPressed() {
         super.onBackPressed()
         gameTimer.cancel()
+        countDownTimer.cancel()
     }
 
     private fun setupViews() {
@@ -84,19 +106,16 @@ class ItemContainerActivity : FragmentActivity(), SensorEventListener {
     override fun onResume() {
         super.onResume()
         sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER_UNCALIBRATED, false)?.also {
-            sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_UI)
+            sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_NORMAL)
         }
         sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD, false)?.also {
-            sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_GAME)
+            sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_NORMAL)
         }
     }
 
     override fun onPause() {
         super.onPause()
         sensorManager.unregisterListener(this)
-    }
-
-    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
     }
 
     override fun onSensorChanged(event: SensorEvent) {
@@ -167,14 +186,7 @@ class ItemContainerActivity : FragmentActivity(), SensorEventListener {
             hasRoundStarted = true
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LOCKED
             setOverlayText(R.string.get_ready)
-            GameTimer(Constants.THREE_SECONDS, Constants.INTERVAL_ONE_SECOND, updateTime) {
-                boundLayout.apply {
-                    textOverlay.visibility = View.GONE
-                    itemViewpager.adapter = ItemPagerAdapter(supportFragmentManager, itemArray)
-                }
-                listenForTilt = true
-                gameTimer.start()
-            }.start()
+            countDownTimer.start()
         }
     }
 
@@ -212,12 +224,7 @@ class ItemContainerActivity : FragmentActivity(), SensorEventListener {
         actionBar?.hide()
     }
 
-    private fun Int.toRadians(): Double {
-        return this*(Math.PI/180)
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        // Not needed
     }
-
-    private fun Long.formatForDisplay(): String {
-        return (this.toDouble() / 1000).roundToInt().toString()
-    }
-
 }

@@ -14,14 +14,14 @@ class MainLocalImpl(
     override fun getCategories(): MainModel {
         var jsonString = ""
         try {
-            val jsonInputStream = assetManager.open("categories.json")!!
+            val jsonInputStream = assetManager.open("categories.json")
             val size = jsonInputStream.available()
             val buffer = ByteArray(size)
             jsonInputStream.read(buffer)
             jsonInputStream.close()
             jsonString = String(buffer, Charset.defaultCharset())
         } catch (e: Exception) {
-            Log.e("", e.message)
+            Log.e("${this::class}", "Unable to fetch categories from json")
         }
         val categoryList = JSONObject(jsonString).getJSONArray("categories")
         val pairList: MutableList<Pair<String, List<String>>> = mutableListOf()

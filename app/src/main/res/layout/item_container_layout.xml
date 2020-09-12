@@ -37,7 +37,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
-        <com.stradivarius.charades.ui.game.ItemContainerViewPager
+        <com.stradivarius.charades.ui.game.container.ItemContainerViewPager
             android:id="@+id/item_viewpager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>

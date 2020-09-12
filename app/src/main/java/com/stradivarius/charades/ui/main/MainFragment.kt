@@ -13,8 +13,6 @@ class MainFragment : BaseViewModelFragment<MainViewModel, MainModel, MainFragmen
 
     companion object {
         const val KEY_BUNDLE = "bundle"
-
-        fun newInstance() = MainFragment()
     }
 
     override fun bindViewModel(viewModel: MainViewModel, boundLayout: MainFragmentBinding) {
