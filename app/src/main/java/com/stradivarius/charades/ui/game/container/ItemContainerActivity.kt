@@ -43,7 +43,6 @@ class ItemContainerActivity : FragmentActivity(), SensorEventListener {
     private val rotationMatrixAdjusted = FloatArray(9)
     private val orientationAngles = FloatArray(3)
     private var hasRoundStarted = false
-    private var listenForTilt = false
     private var waitForUpright = false
 
     private lateinit var boundLayout: ItemContainerLayoutBinding
@@ -67,7 +66,6 @@ class ItemContainerActivity : FragmentActivity(), SensorEventListener {
                 itemArray
             )
         }
-        listenForTilt = true
         gameTimer.start()
     }
 
@@ -89,18 +87,14 @@ class ItemContainerActivity : FragmentActivity(), SensorEventListener {
         itemArray = intent.extras!!
             .getBundle(MainFragment.KEY_BUNDLE)!!
             .getCharSequenceArray(KEY_ITEM_LIST)!!.toList().shuffled().toTypedArray()
-        setupViews()
+        boundLayout.backButton.setOnClickListener { onBackPressed() }
+        setOverlayText(R.string.place_on_forehead)
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
         gameTimer.cancel()
         countDownTimer.cancel()
-    }
-
-    private fun setupViews() {
-        boundLayout.backButton.setOnClickListener { onBackPressed() }
-        setOverlayText(R.string.place_on_forehead)
     }
 
     override fun onResume() {
@@ -129,7 +123,7 @@ class ItemContainerActivity : FragmentActivity(), SensorEventListener {
             startRoundIfCorrectOrientation()
         } else if (waitForUpright) {
             waitForUpright()
-        } else if (listenForTilt) {
+        } else {
             handleTilt()
         }
     }
@@ -143,7 +137,6 @@ class ItemContainerActivity : FragmentActivity(), SensorEventListener {
                 textOverlay.visibility = View.GONE
             }
             waitForUpright = false
-            listenForTilt = true
         }
     }
 
@@ -165,7 +158,6 @@ class ItemContainerActivity : FragmentActivity(), SensorEventListener {
                 viewpagerContainer.setBackgroundColor(getColor(R.color.passGreen))
                 setOverlayText(R.string.pass)
                 waitForUpright = true
-                listenForTilt = false
 
             } else if (orientationAngles[1] < 10.toRadians()
                 && orientationAngles[1] > (-10).toRadians()
@@ -176,7 +168,6 @@ class ItemContainerActivity : FragmentActivity(), SensorEventListener {
                 viewpagerContainer.setBackgroundColor(getColor(R.color.failRed))
                 setOverlayText(R.string.fail)
                 waitForUpright = true
-                listenForTilt = false
             }
         }
     }

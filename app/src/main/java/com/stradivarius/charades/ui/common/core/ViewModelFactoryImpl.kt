@@ -3,6 +3,7 @@ package com.stradivarius.charades.ui.common.core
 import com.stradivarius.charades.data.common.Model
 import com.stradivarius.charades.data.common.core.RepositoryFactory
 import com.stradivarius.charades.data.repository.main.MainRepository
+import com.stradivarius.charades.ui.addcategory.AddCategoryViewModelImpl
 import com.stradivarius.charades.ui.common.BaseViewModel
 import com.stradivarius.charades.ui.game.container.ItemContainerViewModelImpl
 import com.stradivarius.charades.ui.game.item.ItemViewModelImpl
@@ -19,6 +20,7 @@ class ViewModelFactoryImpl(
             )
             ItemContainerViewModelImpl::class.java -> ItemContainerViewModelImpl()
             ItemViewModelImpl::class.java -> ItemViewModelImpl()
+            AddCategoryViewModelImpl::class.java -> AddCategoryViewModelImpl()
             else -> throw IllegalArgumentException("Unrecognized viewmodel class in ${this::class}")
         }
     }
