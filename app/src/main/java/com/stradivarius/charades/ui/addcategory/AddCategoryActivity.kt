@@ -8,7 +8,7 @@ class AddCategoryActivity : BaseFragmentActivity(AddCategoryFragment::class.java
 
     companion object {
 
-        fun createIntent(
+        private fun createIntent(
             context: Context
         ): Intent = Intent(context, AddCategoryActivity::class.java)
 

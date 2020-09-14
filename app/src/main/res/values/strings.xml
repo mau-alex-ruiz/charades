@@ -5,8 +5,13 @@
     <string name="back">&#x2190; Back</string>
     <string name="place_on_forehead">Place the device on your forehead to start.</string>
     <string name="get_ready">Get Ready&#8230;</string>
+
     <string name="add_category">Add Category</string>
+    <string name="add_category_check_mark">Add Category Check Mark</string>
     <string name="category_title">Title:</string>
+    <string name="category_title_hint">Animals</string>
     <string name="category_list">Category List (separate with comma):</string>
     <string name="category_list_hint">dogs, cats, birds</string>
+
+    <string name="form_submit_error">All fields must be filled.</string>
 </resources>

@@ -1,6 +1,9 @@
 package com.stradivarius.charades.data.common.core
 
 import com.stradivarius.charades.data.common.Repository
+import com.stradivarius.charades.data.repository.addcategory.AddCategoryRepository
+import com.stradivarius.charades.data.repository.addcategory.AddCategoryRepositoryImpl
+import com.stradivarius.charades.data.repository.addcategory.local.AddCategoryLocal
 import com.stradivarius.charades.data.repository.main.MainRepository
 import com.stradivarius.charades.data.repository.main.MainRepositoryImpl
 import com.stradivarius.charades.data.repository.main.local.MainLocal
@@ -18,6 +21,9 @@ class RepositoryFactoryImpl(
             cached = when (clazz) {
                 MainRepository::class.java -> MainRepositoryImpl(
                     localFactory.create(MainLocal::class.java)
+                )
+                AddCategoryRepository::class.java -> AddCategoryRepositoryImpl(
+                    localFactory.create(AddCategoryLocal::class.java)
                 )
 
                 else -> throw IllegalArgumentException("No repository found in ${this::class}")
