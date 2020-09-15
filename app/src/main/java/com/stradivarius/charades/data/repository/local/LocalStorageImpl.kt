@@ -67,11 +67,11 @@ class LocalStorageImpl(
                 jsonObject.put(KEY_CATEGORY, title)
                 jsonObject.put(KEY_LIST, JSONArray(list.split(',').toTypedArray()))
                 categoriesJson.getJSONArray(KEY_CATEGORIES).put(jsonObject)
-                mainModel.postValue(jsonStringToMainModel())
-                BufferedWriter(FileWriter(getCategoriesFile())).also { writer ->
-                    writer.write(categoriesJson.toString())
-                    writer.close()
-                }
+            }
+            mainModel.postValue(jsonStringToMainModel())
+            BufferedWriter(FileWriter(getCategoriesFile())).also { writer ->
+                writer.write(categoriesJson.toString())
+                writer.close()
             }
         } catch (e: Exception) {
             return false
