@@ -2,12 +2,12 @@ package com.stradivarius.charades.ui.addcategory
 
 import androidx.databinding.ObservableField
 import com.stradivarius.charades.data.model.AddCategory
-import com.stradivarius.charades.data.repository.addcategory.AddCategoryRepository
+import com.stradivarius.charades.data.repository.AppRepository
 import com.stradivarius.charades.ui.common.BaseViewModelImpl
 import com.stradivarius.charades.ui.common.State
 
 class AddCategoryViewModelImpl(
-    private val repository: AddCategoryRepository
+    private val repository: AppRepository
 ) : BaseViewModelImpl<AddCategory>(), AddCategoryViewModel {
 
     private val currentTitle = ObservableField<String>()
@@ -21,12 +21,16 @@ class AddCategoryViewModelImpl(
         currentTitle.get()?.let { title ->
             currentList.get()?.let { list ->
                 if (!title.isBlank() && !list.isBlank()) {
-                    repository.addCategory(title, list)
+                    if (repository.addCategory(title, list)) {
+                        stateChanged(State.Success())
+                    } else {
+                        stateChanged(State.Error(State.ErrorTypes.Critical()))
+                    }
                 } else {
-                    stateChanged(State.Error())
+                    stateChanged(State.Error(State.ErrorTypes.Warning()))
                 }
             }
-        } ?: stateChanged(State.Error())
+        } ?: stateChanged(State.Error(State.ErrorTypes.Warning()))
     }
 
 

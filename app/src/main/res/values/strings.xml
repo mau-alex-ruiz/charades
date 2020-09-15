@@ -13,5 +13,7 @@
     <string name="category_list">Category List (separate with comma):</string>
     <string name="category_list_hint">dogs, cats, birds</string>
 
+    <!-- Error Strings -->
     <string name="form_submit_error">All fields must be filled.</string>
+    <string name="add_category_fatal_error">Error adding category, kill app and try again.</string>
 </resources>

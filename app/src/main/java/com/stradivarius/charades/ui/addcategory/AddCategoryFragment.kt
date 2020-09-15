@@ -44,10 +44,17 @@ class AddCategoryFragment
         super.onStateChanged(state)
         when (state) {
             is State.Error -> {
-                Toast.makeText(context, R.string.form_submit_error, Toast.LENGTH_SHORT).show()
+                when (state.errorType) {
+                    is State.ErrorTypes.Warning -> {
+                        showShortToast(R.string.form_submit_error)
+                    }
+                    is State.ErrorTypes.Critical -> {
+                        showShortToast(R.string.add_category_fatal_error)
+                    }
+                }
             }
             is State.Success -> {
-
+                activity?.finish()
             }
         }
     }
