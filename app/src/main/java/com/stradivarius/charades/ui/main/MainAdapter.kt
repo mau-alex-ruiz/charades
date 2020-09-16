@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.stradivarius.charades.databinding.CategoryCardViewBinding
 import com.stradivarius.charades.ui.game.container.ItemContainerActivity
 import com.stradivarius.charades.ui.utils.ItemTouchHelperAdapter
+import java.util.Collections.swap
 
 class MainAdapter(
     private val categoryList: List<Pair<String, List<String>>>
@@ -39,6 +40,20 @@ class MainAdapter(
                 notifyItemChanged(viewHolder.adapterPosition)
             }
         }
+    }
+
+    override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
+        if (fromPosition < toPosition) {
+            for (i in fromPosition until toPosition) {
+                swap(categoryList, i, i + 1)
+            }
+        } else {
+            for (i in fromPosition downTo toPosition + 1) {
+                swap(categoryList, i, i - 1)
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition)
+        return true
     }
 
     class CategoryViewHolder(
