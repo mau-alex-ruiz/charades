@@ -1,9 +1,9 @@
-package com.stradivarius.charades.ui.utils
+package com.stradivarius.charades.ui.utils.itemtouchhelper
 
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 
-class CardTouchHelperAdapter(
+class ItemTouchHelperCallback(
     private val adapter: ItemTouchHelperAdapter
 ) : ItemTouchHelper.SimpleCallback(
     ItemTouchHelper.UP or ItemTouchHelper.DOWN,

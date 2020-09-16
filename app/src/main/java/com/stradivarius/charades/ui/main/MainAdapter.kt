@@ -6,12 +6,13 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.stradivarius.charades.databinding.CategoryCardViewBinding
 import com.stradivarius.charades.ui.game.container.ItemContainerActivity
-import com.stradivarius.charades.ui.utils.ItemTouchHelperAdapter
+import com.stradivarius.charades.ui.utils.itemtouchhelper.ItemTouchHelperAdapter
 import java.util.Collections.swap
 
 class MainAdapter(
     private val categoryList: List<Pair<String, List<String>>>
-) : RecyclerView.Adapter<MainAdapter.CategoryViewHolder>(), ItemTouchHelperAdapter {
+) : RecyclerView.Adapter<MainAdapter.CategoryViewHolder>(),
+    ItemTouchHelperAdapter {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         with(CategoryCardViewBinding.inflate(

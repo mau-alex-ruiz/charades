@@ -1,4 +1,4 @@
-package com.stradivarius.charades.ui.utils
+package com.stradivarius.charades.ui.utils.itemtouchhelper
 
 import androidx.recyclerview.widget.RecyclerView
 
