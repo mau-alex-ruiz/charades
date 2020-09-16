@@ -34,6 +34,24 @@ class ItemContainerActivity : FragmentActivity(), SensorEventListener {
     companion object {
         const val KEY_BUNDLE = "bundle"
         const val KEY_ITEM_LIST = "itemList"
+
+        fun createIntent(
+            context: Context,
+            list: Array<String>
+        ): Intent {
+            return Intent(context, ItemContainerActivity::class.java).apply {
+                putExtra(MainFragment.KEY_BUNDLE, Bundle().apply {
+                    putCharSequenceArray(KEY_ITEM_LIST, list)
+                })
+            }
+        }
+
+        fun startActivity(
+            context: Context,
+            list: Array<String>
+        ) {
+            context.startActivity(createIntent(context, list))
+        }
     }
 
     private lateinit var sensorManager: SensorManager

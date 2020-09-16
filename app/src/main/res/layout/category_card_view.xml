@@ -18,6 +18,8 @@
             android:id="@+id/category_card_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:textSize="@dimen/category_card_text"
+            android:textColor="@color/black"
             android:gravity="center"
             android:textAlignment="center"/>
 

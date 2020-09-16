@@ -1,16 +1,16 @@
 package com.stradivarius.charades.ui.main
 
-import android.content.Intent
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.stradivarius.charades.databinding.CategoryCardViewBinding
 import com.stradivarius.charades.ui.game.container.ItemContainerActivity
+import com.stradivarius.charades.ui.utils.ItemTouchHelperAdapter
 
 class MainAdapter(
     private val categoryList: List<Pair<String, List<String>>>
-) : RecyclerView.Adapter<MainAdapter.CategoryViewHolder>() {
+) : RecyclerView.Adapter<MainAdapter.CategoryViewHolder>(), ItemTouchHelperAdapter {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         with(CategoryCardViewBinding.inflate(
@@ -30,23 +30,27 @@ class MainAdapter(
         return categoryList.size
     }
 
+    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+        when(direction) {
+            ItemTouchHelper.END -> {
+                ItemContainerActivity.startActivity(
+                    viewHolder.itemView.context,
+                    categoryList[viewHolder.adapterPosition].second.toTypedArray())
+                notifyItemChanged(viewHolder.adapterPosition)
+            }
+        }
+    }
 
     class CategoryViewHolder(
         private val cardViewBinding: CategoryCardViewBinding
     ) : RecyclerView.ViewHolder(cardViewBinding.root) {
-
 
         fun bind(pair: Pair<String, List<String>>) {
             val (category, entries) = pair
             cardViewBinding.apply {
                 categoryCardText.text = category
                 categoryCardView.setOnClickListener {
-                    val intent = Intent(it.context, ItemContainerActivity::class.java).apply {
-                        putExtra(MainFragment.KEY_BUNDLE, Bundle().apply {
-                            putCharSequenceArray(ItemContainerActivity.KEY_ITEM_LIST, entries.toTypedArray())
-                        })
-                    }
-                    it.context.startActivity(intent)
+                    ItemContainerActivity.startActivity(it.context, entries.toTypedArray())
                 }
             }
         }
