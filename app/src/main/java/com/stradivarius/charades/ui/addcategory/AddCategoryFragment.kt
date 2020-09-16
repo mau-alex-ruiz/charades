@@ -2,15 +2,14 @@ package com.stradivarius.charades.ui.addcategory
 
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import com.stradivarius.charades.R
-import com.stradivarius.charades.data.model.AddCategory
+import com.stradivarius.charades.data.model.AddCategoryModel
 import com.stradivarius.charades.databinding.AddCategoryBinding
 import com.stradivarius.charades.ui.common.BaseViewModelFragment
 import com.stradivarius.charades.ui.common.State
 
 class AddCategoryFragment
-    : BaseViewModelFragment<AddCategoryViewModel, AddCategory, AddCategoryBinding>(
+    : BaseViewModelFragment<AddCategoryViewModel, AddCategoryModel, AddCategoryBinding>(
     AddCategoryViewModel::class.java,
     R.layout.add_category
 ) {
@@ -40,7 +39,7 @@ class AddCategoryFragment
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onStateChanged(state: State<AddCategory>) {
+    override fun onStateChanged(state: State<AddCategoryModel>) {
         super.onStateChanged(state)
         when (state) {
             is State.Error -> {

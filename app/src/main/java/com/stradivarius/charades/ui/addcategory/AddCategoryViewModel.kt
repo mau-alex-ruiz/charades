@@ -1,10 +1,10 @@
 package com.stradivarius.charades.ui.addcategory
 
 import androidx.databinding.ObservableField
-import com.stradivarius.charades.data.model.AddCategory
+import com.stradivarius.charades.data.model.AddCategoryModel
 import com.stradivarius.charades.ui.common.BaseViewModel
 
-interface AddCategoryViewModel : BaseViewModel<AddCategory> {
+interface AddCategoryViewModel : BaseViewModel<AddCategoryModel> {
 
     fun currentTitle(): ObservableField<String>
 

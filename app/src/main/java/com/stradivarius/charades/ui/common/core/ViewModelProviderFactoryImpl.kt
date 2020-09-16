@@ -13,6 +13,8 @@ import com.stradivarius.charades.ui.game.item.ItemViewModel
 import com.stradivarius.charades.ui.game.item.ItemViewModelImpl
 import com.stradivarius.charades.ui.main.MainViewModel
 import com.stradivarius.charades.ui.main.MainViewModelImpl
+import com.stradivarius.charades.ui.settings.SettingsViewModel
+import com.stradivarius.charades.ui.settings.SettingsViewModelImpl
 
 class ViewModelProviderFactoryImpl(
     private val viewModelFactory: ViewModelFactory
@@ -31,6 +33,7 @@ class ViewModelProviderFactoryImpl(
             ItemContainerViewModel::class.java -> ItemContainerViewModelImpl::class.java
             ItemViewModel::class.java -> ItemViewModelImpl::class.java
             AddCategoryViewModel::class.java -> AddCategoryViewModelImpl::class.java
+            SettingsViewModel::class.java -> SettingsViewModelImpl::class.java
             else -> throw  IllegalArgumentException("ViewModel not found in ${this::class}")
         }
         return ViewModelProvider(fragment, this).get(implClass) as V

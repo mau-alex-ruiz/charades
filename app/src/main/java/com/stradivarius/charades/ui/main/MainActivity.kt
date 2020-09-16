@@ -12,6 +12,7 @@ import com.stradivarius.charades.ui.common.BaseFragmentActivity
 import com.stradivarius.charades.ui.common.BaseViewModel
 import com.stradivarius.charades.ui.common.BaseViewModelFragment
 import com.stradivarius.charades.ui.common.core.Di
+import com.stradivarius.charades.ui.settings.SettingsActivity
 
 class MainActivity : BaseFragmentActivity(MainFragment::class.java) {
 
@@ -29,6 +30,7 @@ class MainActivity : BaseFragmentActivity(MainFragment::class.java) {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.settings_cog -> SettingsActivity.startActivity(this)
             R.id.add_list -> AddCategoryActivity.startActivity(this)
         }
         return super.onOptionsItemSelected(item)

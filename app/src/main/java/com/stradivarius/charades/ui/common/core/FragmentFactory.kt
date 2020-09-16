@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentFactory
 import com.stradivarius.charades.ui.addcategory.AddCategoryFragment
 import com.stradivarius.charades.ui.game.container.ItemContainerFragment
 import com.stradivarius.charades.ui.main.MainFragment
+import com.stradivarius.charades.ui.settings.SettingsFragment
 
 class FragmentFactory : FragmentFactory() {
 
@@ -16,6 +17,8 @@ class FragmentFactory : FragmentFactory() {
                 ItemContainerFragment()
             AddCategoryFragment::class.java ->
                 AddCategoryFragment()
+            SettingsFragment::class.java ->
+                SettingsFragment()
             else -> super.instantiate(classLoader, className)
         }
     }

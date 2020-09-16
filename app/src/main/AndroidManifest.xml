@@ -29,6 +29,12 @@
 
         <activity
             android:name=".ui.addcategory.AddCategoryActivity"
+            android:label="@string/add_category"
+        />
+
+        <activity
+            android:name=".ui.settings.SettingsActivity"
+            android:label="@string/settings"
         />
 
     </application>

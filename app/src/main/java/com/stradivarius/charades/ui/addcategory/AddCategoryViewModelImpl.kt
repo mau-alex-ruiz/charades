@@ -1,14 +1,14 @@
 package com.stradivarius.charades.ui.addcategory
 
 import androidx.databinding.ObservableField
-import com.stradivarius.charades.data.model.AddCategory
+import com.stradivarius.charades.data.model.AddCategoryModel
 import com.stradivarius.charades.data.repository.AppRepository
 import com.stradivarius.charades.ui.common.BaseViewModelImpl
 import com.stradivarius.charades.ui.common.State
 
 class AddCategoryViewModelImpl(
     private val repository: AppRepository
-) : BaseViewModelImpl<AddCategory>(), AddCategoryViewModel {
+) : BaseViewModelImpl<AddCategoryModel>(), AddCategoryViewModel {
 
     private val currentTitle = ObservableField<String>()
     private val currentList = ObservableField<String>()
