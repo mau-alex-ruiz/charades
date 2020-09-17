@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="model" type="com.stradivarius.charades.ui.addcategory.AddCategoryViewModel" />
+        <variable name="model" type="com.stradivarius.charades.ui.category.base.CategoryViewModel" />
     </data>
 
     <ScrollView

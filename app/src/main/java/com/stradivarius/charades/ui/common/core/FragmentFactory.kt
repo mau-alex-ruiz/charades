@@ -2,7 +2,7 @@ package com.stradivarius.charades.ui.common.core
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
-import com.stradivarius.charades.ui.addcategory.AddCategoryFragment
+import com.stradivarius.charades.ui.category.add.AddCategoryFragment
 import com.stradivarius.charades.ui.game.container.ItemContainerFragment
 import com.stradivarius.charades.ui.main.MainFragment
 import com.stradivarius.charades.ui.settings.SettingsFragment

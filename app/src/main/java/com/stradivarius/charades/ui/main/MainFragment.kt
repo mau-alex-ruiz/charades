@@ -28,10 +28,16 @@ class MainFragment : BaseViewModelFragment<MainViewModel, MainModel, MainFragmen
         when (state) {
             is State.Loaded -> {
                 boundLayout.categoriesRecyclerView.apply {
-                    MainAdapter(state.model!!.categories, viewModel).also {
-                        adapter = it
-                        ItemTouchHelper(ItemTouchHelperCallback(it))
-                            .attachToRecyclerView(this)
+                    if (adapter == null) {
+                        MainAdapter(state.model!!.categories, viewModel).also {
+                            adapter = it
+                            ItemTouchHelper(ItemTouchHelperCallback(it))
+                                .attachToRecyclerView(this)
+                        }
+                    } else {
+                        with(adapter as MainAdapter) {
+                            updateDataSet(state.model!!.categories)
+                        }
                     }
                 }
             }

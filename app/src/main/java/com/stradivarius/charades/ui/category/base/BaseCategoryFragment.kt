@@ -1,18 +1,20 @@
-package com.stradivarius.charades.ui.addcategory
+package com.stradivarius.charades.ui.category.base
 
 import android.os.Bundle
 import android.view.*
 import com.stradivarius.charades.R
-import com.stradivarius.charades.data.model.AddCategoryModel
+import com.stradivarius.charades.data.model.CategoryModel
 import com.stradivarius.charades.databinding.AddCategoryBinding
+import com.stradivarius.charades.ui.common.BaseViewModel
 import com.stradivarius.charades.ui.common.BaseViewModelFragment
 import com.stradivarius.charades.ui.common.State
 
-class AddCategoryFragment
-    : BaseViewModelFragment<AddCategoryViewModel, AddCategoryModel, AddCategoryBinding>(
-    AddCategoryViewModel::class.java,
+abstract class BaseCategoryFragment<V>(
+    viewModelClass: Class<V>
+) : BaseViewModelFragment<V, CategoryModel, AddCategoryBinding>(
+    viewModelClass,
     R.layout.add_category
-) {
+) where V : CategoryViewModel {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -23,7 +25,7 @@ class AddCategoryFragment
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
-    override fun bindViewModel(viewModel: AddCategoryViewModel, boundLayout: AddCategoryBinding) {
+    override fun bindViewModel(viewModel: V, boundLayout: AddCategoryBinding) {
         boundLayout.model = viewModel
     }
 
@@ -39,7 +41,7 @@ class AddCategoryFragment
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onStateChanged(state: State<AddCategoryModel>) {
+    override fun onStateChanged(state: State<CategoryModel>) {
         super.onStateChanged(state)
         when (state) {
             is State.Error -> {

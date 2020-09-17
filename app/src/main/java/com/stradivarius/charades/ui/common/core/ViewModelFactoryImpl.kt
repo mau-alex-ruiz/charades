@@ -3,7 +3,7 @@ package com.stradivarius.charades.ui.common.core
 import com.stradivarius.charades.data.common.Model
 import com.stradivarius.charades.data.common.core.RepositoryFactory
 import com.stradivarius.charades.data.repository.AppRepository
-import com.stradivarius.charades.ui.addcategory.AddCategoryViewModelImpl
+import com.stradivarius.charades.ui.category.add.AddCategoryViewModelImpl
 import com.stradivarius.charades.ui.common.BaseViewModel
 import com.stradivarius.charades.ui.game.container.ItemContainerViewModelImpl
 import com.stradivarius.charades.ui.game.item.ItemViewModelImpl

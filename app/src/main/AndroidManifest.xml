@@ -28,7 +28,7 @@
         />
 
         <activity
-            android:name=".ui.addcategory.AddCategoryActivity"
+            android:name="com.stradivarius.charades.ui.category.add.AddCategoryActivity"
             android:label="@string/add_category"
         />
 

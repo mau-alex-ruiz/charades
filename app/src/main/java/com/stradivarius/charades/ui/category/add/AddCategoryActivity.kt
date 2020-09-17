@@ -1,4 +1,4 @@
-package com.stradivarius.charades.ui.addcategory
+package com.stradivarius.charades.ui.category.add
 
 import android.content.Context
 import android.content.Intent

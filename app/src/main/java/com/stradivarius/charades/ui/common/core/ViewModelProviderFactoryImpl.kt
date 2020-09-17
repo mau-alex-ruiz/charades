@@ -4,8 +4,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.stradivarius.charades.data.common.Model
-import com.stradivarius.charades.ui.addcategory.AddCategoryViewModel
-import com.stradivarius.charades.ui.addcategory.AddCategoryViewModelImpl
+import com.stradivarius.charades.ui.category.add.AddCategoryViewModel
+import com.stradivarius.charades.ui.category.add.AddCategoryViewModelImpl
 import com.stradivarius.charades.ui.common.BaseViewModel
 import com.stradivarius.charades.ui.game.container.ItemContainerViewModel
 import com.stradivarius.charades.ui.game.container.ItemContainerViewModelImpl

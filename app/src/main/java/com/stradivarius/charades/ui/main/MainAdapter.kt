@@ -10,7 +10,7 @@ import com.stradivarius.charades.ui.utils.itemtouchhelper.ItemTouchHelperAdapter
 import java.util.Collections.swap
 
 class MainAdapter(
-    private val categoryList: List<Pair<String, List<String>>>,
+    private var categoryList: List<Pair<String, List<String>>>,
     private val viewModel: MainViewModel
 ) : RecyclerView.Adapter<MainAdapter.CategoryViewHolder>(),
     ItemTouchHelperAdapter {
@@ -35,6 +35,10 @@ class MainAdapter(
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         when(direction) {
+            ItemTouchHelper.START -> {
+
+                notifyItemChanged(viewHolder.adapterPosition)
+            }
             ItemTouchHelper.END -> {
                 ItemContainerActivity.startActivity(
                     viewHolder.itemView.context,
@@ -60,6 +64,11 @@ class MainAdapter(
         }
         notifyItemMoved(fromPosition, toPosition)
         return true
+    }
+
+    fun updateDataSet(categoryList: List<Pair<String, List<String>>>) {
+        this.categoryList = categoryList
+        notifyDataSetChanged()
     }
 
     class CategoryViewHolder(
