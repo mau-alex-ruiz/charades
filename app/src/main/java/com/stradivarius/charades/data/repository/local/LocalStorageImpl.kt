@@ -5,6 +5,7 @@ import android.os.Environment
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.stradivarius.charades.data.dto.MainDto
 import com.stradivarius.charades.data.model.MainModel
 import org.json.JSONArray
 import org.json.JSONObject
@@ -23,8 +24,11 @@ class LocalStorageImpl(
         const val CATEGORIES_FILE = "categories.json"
     }
 
-    private var categoriesJson = JSONObject()
+    override var isDirty: Boolean = false
+
+    private var mainDto = MainDto()
     private val mainModel = MutableLiveData<MainModel>()
+    private var tempCategoryList: List<Pair<String, List<String>>> = listOf()
 
     override fun getCategories(): LiveData<MainModel> {
         var jsonString = ""
@@ -56,9 +60,13 @@ class LocalStorageImpl(
             bufferedReader.close()
             jsonString = stringBuilder.toString()
         }
-        categoriesJson = JSONObject(jsonString)
-        mainModel.postValue(jsonStringToMainModel())
+        mainDto = MainDto(JSONObject(jsonString))
+        mainModel.postValue(mainDto.toModel())
         return mainModel
+    }
+
+    override fun setCategories(list: List<Pair<String, List<String>>>) {
+        tempCategoryList = list
     }
 
     override fun addCategory(title: String, list: String): Boolean {
@@ -66,13 +74,10 @@ class LocalStorageImpl(
             JSONObject().also { jsonObject ->
                 jsonObject.put(KEY_CATEGORY, title)
                 jsonObject.put(KEY_LIST, JSONArray(list.split(',').toTypedArray()))
-                categoriesJson.getJSONArray(KEY_CATEGORIES).put(jsonObject)
+                mainDto.categoriesJson.getJSONArray(KEY_CATEGORIES).put(jsonObject)
             }
-            mainModel.postValue(jsonStringToMainModel())
-            BufferedWriter(FileWriter(getCategoriesFile())).also { writer ->
-                writer.write(categoriesJson.toString())
-                writer.close()
-            }
+            mainModel.postValue(mainDto.toModel())
+            writeJsonToFile(mainDto.categoriesJson)
         } catch (e: Exception) {
             return false
         }
@@ -83,33 +88,35 @@ class LocalStorageImpl(
         //no-op
     }
 
+    override fun writeCategoriesStateToJson() {
+        if (tempCategoryList.isNotEmpty() && isDirty) {
+            val jsonArray = JSONArray()
+            for ((title, items) in tempCategoryList) {
+                val jsonObject = JSONObject().apply {
+                    put(KEY_CATEGORY, title)
+                    put(KEY_LIST, items)
+                }
+                jsonArray.put(jsonObject)
+            }
+            val jsonObject = JSONObject().apply {
+                put(KEY_CATEGORIES, jsonArray)
+            }
+            writeJsonToFile(jsonObject)
+            tempCategoryList = listOf()
+            isDirty = false
+        }
+    }
+
+    private fun writeJsonToFile(json: JSONObject) {
+        BufferedWriter(FileWriter(getCategoriesFile())).also { writer ->
+            writer.write(json.toString())
+            writer.close()
+        }
+    }
+
     private fun getCategoriesFile(): File {
         return File(Environment.getDataDirectory().absolutePath +
-                    "/data/com.stradivarius.charades/" + CATEGORIES_FILE)
-    }
-
-    private fun jsonStringToMainModel(): MainModel {
-        val pairList: MutableList<Pair<String, List<String>>> = mutableListOf()
-        val categoriesJSONArray = categoriesJson.getJSONArray(KEY_CATEGORIES)
-        for (i in 0 until categoriesJSONArray.length()) {
-            val category = categoriesJSONArray.getJSONObject(i)
-            pairList.add(
-                Pair(category.optString(KEY_CATEGORY),
-                    category.optJSONArray(KEY_LIST).toList())
-            )
-        }
-        return MainModel(pairList)
-    }
-
-    private fun JSONArray?.toList(): List<String> {
-        val list = mutableListOf<String>()
-        if (this == null) {
-            return list
-        }
-        for (i in 0 until this.length()) {
-            list.add(this.optString(i))
-        }
-        return list
+                "/data/com.stradivarius.charades/" + CATEGORIES_FILE)
     }
 
 }

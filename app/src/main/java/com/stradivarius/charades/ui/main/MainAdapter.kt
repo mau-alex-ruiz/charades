@@ -10,7 +10,8 @@ import com.stradivarius.charades.ui.utils.itemtouchhelper.ItemTouchHelperAdapter
 import java.util.Collections.swap
 
 class MainAdapter(
-    private val categoryList: List<Pair<String, List<String>>>
+    private val categoryList: List<Pair<String, List<String>>>,
+    private val viewModel: MainViewModel
 ) : RecyclerView.Adapter<MainAdapter.CategoryViewHolder>(),
     ItemTouchHelperAdapter {
 
@@ -52,6 +53,10 @@ class MainAdapter(
             for (i in fromPosition downTo toPosition + 1) {
                 swap(categoryList, i, i - 1)
             }
+        }
+        if (fromPosition != toPosition) {
+            viewModel.setCategories(categoryList)
+            viewModel.isDirty = true
         }
         notifyItemMoved(fromPosition, toPosition)
         return true
