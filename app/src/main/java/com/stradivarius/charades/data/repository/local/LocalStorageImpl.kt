@@ -19,7 +19,6 @@ class LocalStorageImpl(
 ) : LocalStorage {
 
     companion object {
-        const val KEY_CATEGORIES = "categories"
         const val KEY_CATEGORY = "category"
         const val KEY_LIST = "list"
         const val CATEGORIES_FILE = "categories.json"
@@ -30,11 +29,14 @@ class LocalStorageImpl(
     private var mainDto = MainDto()
     private val mainModel = MutableLiveData<MainModel>()
     private var tempCategoryList: List<Pair<String, List<String>>> = listOf()
+    private val categoriesFile: File by lazy {
+        File(Environment.getDataDirectory().absolutePath +
+                "/data/com.stradivarius.charades/" + CATEGORIES_FILE)
+    }
 
     override fun getCategories(): LiveData<MainModel> {
         var jsonString = ""
-        val file = getCategoriesFile()
-        if (file.length().toInt() == 0) {
+        if (categoriesFile.length().toInt() == 0) {
             try {
                 val jsonInputStream = assetManager.open(CATEGORIES_FILE)
                 val size = jsonInputStream.available()
@@ -45,12 +47,9 @@ class LocalStorageImpl(
             } catch (e: Exception) {
                 Log.e("${this::class}", "Unable to fetch categories from asset json")
             }
-            BufferedWriter(FileWriter(file)).apply {
-                write(jsonString)
-                close()
-            }
+            writeJsonArrayToFile(JSONArray(jsonString))
         } else {
-            val fileReader = FileReader(file)
+            val fileReader = FileReader(categoriesFile)
             val bufferedReader = BufferedReader(fileReader)
             val stringBuilder = StringBuilder()
             var line = bufferedReader.readLine()
@@ -61,8 +60,8 @@ class LocalStorageImpl(
             bufferedReader.close()
             jsonString = stringBuilder.toString()
         }
-        mainDto = MainDto(JSONObject(jsonString))
-        mainModel.postValue(mainDto.toModel())
+        mainDto = MainDto(JSONArray(jsonString))
+        mainModel.postValue(MainModel(mainDto))
         return mainModel
     }
 
@@ -72,25 +71,30 @@ class LocalStorageImpl(
 
     override fun addCategory(title: String, list: String): RepoStatus<Unit> {
         return try {
-            JSONObject().also { jsonObject ->
-                jsonObject.put(KEY_CATEGORY, title)
-                jsonObject.put(KEY_LIST, JSONArray(list.split(',').toTypedArray()))
-                mainDto.categoriesJson.getJSONArray(KEY_CATEGORIES).put(jsonObject)
-            }
-            mainModel.postValue(mainDto.toModel())
-            writeJsonToFile(mainDto.categoriesJson)
+            mainDto.categoriesMap[title] = list.split(',')
+            mainModel.postValue(MainModel(mainDto))
+            writeJsonArrayToFile(mainDto.toJsonArray())
             RepoStatus.Success()
         } catch (e: Exception) {
             RepoStatus.Error()
         }
     }
 
-    override fun editCategory(title: String, list: String): RepoStatus<Unit> {
-        return RepoStatus.Error()
-    }
-
-    override fun close() {
-        //no-op
+    override fun editCategory(originalTitle: String,
+                              newTitle: String,
+                              list: String): RepoStatus<Unit> {
+        val newMap = linkedMapOf<String, List<String>>()
+        for ((title, currList) in mainDto.categoriesMap.toList()) {
+            if (title == originalTitle) {
+                newMap[newTitle] = list.split("\n")
+            } else {
+                newMap[title] = currList
+            }
+        }
+        mainDto = MainDto(newMap)
+        mainModel.postValue(MainModel(mainDto))
+        writeJsonArrayToFile(mainDto.toJsonArray())
+        return RepoStatus.Success()
     }
 
     override fun writeCategoriesStateToJson() {
@@ -99,29 +103,25 @@ class LocalStorageImpl(
             for ((title, items) in tempCategoryList) {
                 val jsonObject = JSONObject().apply {
                     put(KEY_CATEGORY, title)
-                    put(KEY_LIST, items)
+                    put(KEY_LIST, JSONArray(items.toTypedArray()))
                 }
                 jsonArray.put(jsonObject)
             }
-            val jsonObject = JSONObject().apply {
-                put(KEY_CATEGORIES, jsonArray)
-            }
-            writeJsonToFile(jsonObject)
+            writeJsonArrayToFile(jsonArray)
             tempCategoryList = listOf()
             isDirty = false
         }
     }
 
-    private fun writeJsonToFile(json: JSONObject) {
-        BufferedWriter(FileWriter(getCategoriesFile())).also { writer ->
+    override fun close() {
+        //no-op
+    }
+
+    private fun writeJsonArrayToFile(json: JSONArray) {
+        BufferedWriter(FileWriter(categoriesFile)).also { writer ->
             writer.write(json.toString())
             writer.close()
         }
-    }
-
-    private fun getCategoriesFile(): File {
-        return File(Environment.getDataDirectory().absolutePath +
-                "/data/com.stradivarius.charades/" + CATEGORIES_FILE)
     }
 
 }

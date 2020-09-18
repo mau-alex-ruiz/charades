@@ -11,14 +11,17 @@ class EditCategoryViewModelImpl(
     private val repository: AppRepository
 ) : BaseCategoryViewModelImpl(repository), EditCategoryViewModel {
 
+    private var originalTitle = ""
+
     override val submitFormMap: LiveData<RepoStatus<Unit>>
         get() = Transformations.map(submitFormListener) {
             it?.let { (title, list) ->
-                repository.editCategory(title, list)
+                repository.editCategory(originalTitle, title, list)
             }
         }
 
     override fun init(categoryTitle: String, categoryList: List<String>) {
+        this.originalTitle = categoryTitle
         this.currentTitle.set(categoryTitle)
         this.currentList.set(categoryList.sorted().joinToString(separator = "\n"))
     }

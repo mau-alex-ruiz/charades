@@ -21,8 +21,12 @@ class AppRepositoryImpl(
         return local.addCategory(title, list)
     }
 
-    override fun editCategory(title: String, list: String): RepoStatus<Unit> {
-        return local.editCategory(title, list)
+    override fun editCategory(
+        originalTitle: String,
+        newTitle: String,
+        list: String
+    ): RepoStatus<Unit> {
+        return local.editCategory(originalTitle, newTitle, list)
     }
 
     override fun setCategories(list: List<Pair<String, List<String>>>) {

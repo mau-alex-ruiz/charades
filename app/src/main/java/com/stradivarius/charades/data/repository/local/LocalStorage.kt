@@ -15,7 +15,7 @@ interface LocalStorage : Local {
 
     fun addCategory(title: String, list: String): RepoStatus<Unit>
 
-    fun editCategory(title: String, list: String): RepoStatus<Unit>
+    fun editCategory(originalTitle: String, newTitle: String, list: String): RepoStatus<Unit>
 
     fun writeCategoriesStateToJson()
 
