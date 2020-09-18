@@ -99,15 +99,13 @@ class LocalStorageImpl(
 
     override fun writeCategoriesStateToJson() {
         if (tempCategoryList.isNotEmpty() && isDirty) {
-            val jsonArray = JSONArray()
-            for ((title, items) in tempCategoryList) {
-                val jsonObject = JSONObject().apply {
-                    put(KEY_CATEGORY, title)
-                    put(KEY_LIST, JSONArray(items.toTypedArray()))
-                }
-                jsonArray.put(jsonObject)
+            val newMap = linkedMapOf<String, List<String>>()
+            for ((title, list) in tempCategoryList) {
+                newMap[title] = list
             }
-            writeJsonArrayToFile(jsonArray)
+            mainDto = MainDto(newMap)
+            mainModel.postValue(MainModel(mainDto))
+            writeJsonArrayToFile(mainDto.toJsonArray())
             tempCategoryList = listOf()
             isDirty = false
         }
