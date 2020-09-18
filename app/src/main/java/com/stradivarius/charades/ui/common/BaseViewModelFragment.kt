@@ -45,6 +45,7 @@ abstract class BaseViewModelFragment<V, M, B>(
         viewModel.observeStateChanges().observe(this as LifecycleOwner, Observer {
             onStateChanged(it)
         })
+        viewModel.init()
         bindViewModel(viewModel, boundLayout)
     }
 

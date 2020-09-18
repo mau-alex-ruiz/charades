@@ -1,4 +1,4 @@
-package com.stradivarius.charades.ui.category.add
+package com.stradivarius.charades.ui.category.edit
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
@@ -7,15 +7,20 @@ import com.stradivarius.charades.ui.category.base.BaseCategoryViewModelImpl
 import com.stradivarius.charades.ui.common.RepoStatus
 import com.stradivarius.charades.ui.common.State
 
-class AddCategoryViewModelImpl(
+class EditCategoryViewModelImpl(
     private val repository: AppRepository
-) : BaseCategoryViewModelImpl(repository), AddCategoryViewModel {
+) : BaseCategoryViewModelImpl(repository), EditCategoryViewModel {
 
     override val submitFormMap: LiveData<RepoStatus<Unit>>
         get() = Transformations.map(submitFormListener) {
             it?.let { (title, list) ->
-            repository.addCategory(title, list)
+                repository.editCategory(title, list)
+            }
         }
+
+    override fun init(categoryTitle: String, categoryList: List<String>) {
+        this.currentTitle.set(categoryTitle)
+        this.currentList.set(categoryList.sorted().joinToString(separator = "\n"))
     }
 
     override fun submitForm() {

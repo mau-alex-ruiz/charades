@@ -4,6 +4,7 @@ import com.stradivarius.charades.data.common.Model
 import com.stradivarius.charades.data.common.core.RepositoryFactory
 import com.stradivarius.charades.data.repository.AppRepository
 import com.stradivarius.charades.ui.category.add.AddCategoryViewModelImpl
+import com.stradivarius.charades.ui.category.edit.EditCategoryViewModelImpl
 import com.stradivarius.charades.ui.common.BaseViewModel
 import com.stradivarius.charades.ui.game.container.ItemContainerViewModelImpl
 import com.stradivarius.charades.ui.game.item.ItemViewModelImpl
@@ -22,6 +23,9 @@ class ViewModelFactoryImpl(
             ItemContainerViewModelImpl::class.java -> ItemContainerViewModelImpl()
             ItemViewModelImpl::class.java -> ItemViewModelImpl()
             AddCategoryViewModelImpl::class.java -> AddCategoryViewModelImpl(
+                repositoryFactory.create(AppRepository::class.java)
+            )
+            EditCategoryViewModelImpl::class.java -> EditCategoryViewModelImpl(
                 repositoryFactory.create(AppRepository::class.java)
             )
             SettingsViewModelImpl::class.java -> SettingsViewModelImpl()

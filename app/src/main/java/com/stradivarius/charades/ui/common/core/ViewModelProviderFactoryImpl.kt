@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.stradivarius.charades.data.common.Model
 import com.stradivarius.charades.ui.category.add.AddCategoryViewModel
 import com.stradivarius.charades.ui.category.add.AddCategoryViewModelImpl
+import com.stradivarius.charades.ui.category.edit.EditCategoryViewModel
+import com.stradivarius.charades.ui.category.edit.EditCategoryViewModelImpl
 import com.stradivarius.charades.ui.common.BaseViewModel
 import com.stradivarius.charades.ui.game.container.ItemContainerViewModel
 import com.stradivarius.charades.ui.game.container.ItemContainerViewModelImpl
@@ -33,6 +35,7 @@ class ViewModelProviderFactoryImpl(
             ItemContainerViewModel::class.java -> ItemContainerViewModelImpl::class.java
             ItemViewModel::class.java -> ItemViewModelImpl::class.java
             AddCategoryViewModel::class.java -> AddCategoryViewModelImpl::class.java
+            EditCategoryViewModel::class.java -> EditCategoryViewModelImpl::class.java
             SettingsViewModel::class.java -> SettingsViewModelImpl::class.java
             else -> throw  IllegalArgumentException("ViewModel not found in ${this::class}")
         }

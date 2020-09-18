@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.stradivarius.charades.data.dto.MainDto
 import com.stradivarius.charades.data.model.MainModel
+import com.stradivarius.charades.ui.common.RepoStatus
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.*
@@ -69,8 +70,8 @@ class LocalStorageImpl(
         tempCategoryList = list
     }
 
-    override fun addCategory(title: String, list: String): Boolean {
-        try {
+    override fun addCategory(title: String, list: String): RepoStatus<Unit> {
+        return try {
             JSONObject().also { jsonObject ->
                 jsonObject.put(KEY_CATEGORY, title)
                 jsonObject.put(KEY_LIST, JSONArray(list.split(',').toTypedArray()))
@@ -78,10 +79,14 @@ class LocalStorageImpl(
             }
             mainModel.postValue(mainDto.toModel())
             writeJsonToFile(mainDto.categoriesJson)
+            RepoStatus.Success()
         } catch (e: Exception) {
-            return false
+            RepoStatus.Error()
         }
-        return true
+    }
+
+    override fun editCategory(title: String, list: String): RepoStatus<Unit> {
+        return RepoStatus.Error()
     }
 
     override fun close() {

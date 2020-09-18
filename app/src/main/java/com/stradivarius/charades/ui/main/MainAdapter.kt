@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.stradivarius.charades.databinding.CategoryCardViewBinding
+import com.stradivarius.charades.ui.category.edit.EditCategoryActivity
 import com.stradivarius.charades.ui.game.container.ItemContainerActivity
 import com.stradivarius.charades.ui.utils.itemtouchhelper.ItemTouchHelperAdapter
 import java.util.Collections.swap
@@ -36,7 +37,11 @@ class MainAdapter(
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         when(direction) {
             ItemTouchHelper.START -> {
-
+                EditCategoryActivity.startActivity(
+                    viewHolder.itemView.context,
+                    categoryList[viewHolder.adapterPosition].first,
+                    categoryList[viewHolder.adapterPosition].second
+                )
                 notifyItemChanged(viewHolder.adapterPosition)
             }
             ItemTouchHelper.END -> {

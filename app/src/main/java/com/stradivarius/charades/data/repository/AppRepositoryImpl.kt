@@ -3,6 +3,7 @@ package com.stradivarius.charades.data.repository
 import androidx.lifecycle.LiveData
 import com.stradivarius.charades.data.model.MainModel
 import com.stradivarius.charades.data.repository.local.LocalStorage
+import com.stradivarius.charades.ui.common.RepoStatus
 
 class AppRepositoryImpl(
     private val local: LocalStorage
@@ -16,8 +17,12 @@ class AppRepositoryImpl(
         return local.getCategories()
     }
 
-    override fun addCategory(title: String, list: String): Boolean {
+    override fun addCategory(title: String, list: String): RepoStatus<Unit> {
         return local.addCategory(title, list)
+    }
+
+    override fun editCategory(title: String, list: String): RepoStatus<Unit> {
+        return local.editCategory(title, list)
     }
 
     override fun setCategories(list: List<Pair<String, List<String>>>) {

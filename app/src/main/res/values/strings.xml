@@ -17,4 +17,5 @@
     <!-- Error Strings -->
     <string name="form_submit_error">All fields must be filled.</string>
     <string name="add_category_fatal_error">Error adding category, kill app and try again.</string>
+    <string name="edit_category_fatal_error">Error editing category, please try again.</string>
 </resources>

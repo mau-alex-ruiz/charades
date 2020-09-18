@@ -9,6 +9,10 @@ abstract class BaseFragmentActivity(
     private val fragmentClass: Class<out BaseViewModelFragment<*,*,*>>
 ) : AppCompatActivity() {
 
+    companion object {
+        const val KEY_BUNDLE = "bundle"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         supportFragmentManager.fragmentFactory = FragmentFactory()
         super.onCreate(savedInstanceState)
@@ -20,7 +24,9 @@ abstract class BaseFragmentActivity(
                     supportFragmentManager.fragmentFactory.instantiate(
                         classLoader,
                         fragmentClass.canonicalName!!
-                    )
+                    ).apply {
+                        arguments = intent?.extras?.getBundle(KEY_BUNDLE)
+                    }
                 )
                 .commitNow()
         }

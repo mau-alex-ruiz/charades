@@ -2,6 +2,8 @@ package com.stradivarius.charades.ui.common
 
 sealed class State<M>(val model: M? = null) {
 
+    class InProgress<M>(model: M? = null) : State<M>(model)
+
     class Loaded<M>(model: M? = null) : State<M>(model)
 
     class Success<M>(model: M? = null): State<M>(model)

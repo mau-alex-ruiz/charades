@@ -3,6 +3,7 @@ package com.stradivarius.charades.data.repository
 import androidx.lifecycle.LiveData
 import com.stradivarius.charades.data.common.Repository
 import com.stradivarius.charades.data.model.MainModel
+import com.stradivarius.charades.ui.common.RepoStatus
 
 interface AppRepository : Repository {
 
@@ -10,7 +11,9 @@ interface AppRepository : Repository {
 
     fun getCategories(): LiveData<MainModel>
 
-    fun addCategory(title: String, list: String): Boolean
+    fun addCategory(title: String, list: String): RepoStatus<Unit>
+
+    fun editCategory(title: String, list: String): RepoStatus<Unit>
 
     fun setCategories(list: List<Pair<String, List<String>>>)
 

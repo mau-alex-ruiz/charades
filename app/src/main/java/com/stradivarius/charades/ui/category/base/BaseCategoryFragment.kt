@@ -4,16 +4,15 @@ import android.os.Bundle
 import android.view.*
 import com.stradivarius.charades.R
 import com.stradivarius.charades.data.model.CategoryModel
-import com.stradivarius.charades.databinding.AddCategoryBinding
-import com.stradivarius.charades.ui.common.BaseViewModel
+import com.stradivarius.charades.databinding.AddEditCategoryBinding
 import com.stradivarius.charades.ui.common.BaseViewModelFragment
 import com.stradivarius.charades.ui.common.State
 
 abstract class BaseCategoryFragment<V>(
     viewModelClass: Class<V>
-) : BaseViewModelFragment<V, CategoryModel, AddCategoryBinding>(
+) : BaseViewModelFragment<V, CategoryModel, AddEditCategoryBinding>(
     viewModelClass,
-    R.layout.add_category
+    R.layout.add_edit_category
 ) where V : CategoryViewModel {
 
     override fun onCreateView(
@@ -25,7 +24,7 @@ abstract class BaseCategoryFragment<V>(
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
-    override fun bindViewModel(viewModel: V, boundLayout: AddCategoryBinding) {
+    override fun bindViewModel(viewModel: V, boundLayout: AddEditCategoryBinding) {
         boundLayout.model = viewModel
     }
 

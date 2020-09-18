@@ -37,6 +37,10 @@
             android:label="@string/settings"
         />
 
+        <activity
+            android:name=".ui.category.edit.EditCategoryActivity"
+        />
+
     </application>
 
 </manifest>
