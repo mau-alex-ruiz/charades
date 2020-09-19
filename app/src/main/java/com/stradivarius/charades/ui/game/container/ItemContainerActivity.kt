@@ -8,8 +8,8 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Bundle
-import android.view.Surface.ROTATION_270
-import android.view.Surface.ROTATION_90
+import android.util.Log
+import android.view.Surface.*
 import android.view.View
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
@@ -62,6 +62,7 @@ class ItemContainerActivity : FragmentActivity(), SensorEventListener {
     private val orientationAngles = FloatArray(3)
     private var hasRoundStarted = false
     private var waitForUpright = false
+    private var blockSensor = false
 
     private lateinit var boundLayout: ItemContainerLayoutBinding
     private lateinit var itemArray: Array<CharSequence>
@@ -85,9 +86,11 @@ class ItemContainerActivity : FragmentActivity(), SensorEventListener {
             )
         }
         gameTimer.start()
+        blockSensor = false
+        hasRoundStarted = true
     }
 
-    private val gameTimer: GameTimer = GameTimer(6000, Constants.INTERVAL_ONE_SECOND, updateTime) {
+    private val gameTimer: GameTimer = GameTimer(60000, Constants.INTERVAL_ONE_SECOND, updateTime) {
         val intent = Intent(this, ResultsActivity::class.java).apply {
             putExtra(KEY_BUNDLE, Bundle().apply {
                 putCharSequenceArray(ResultsActivity.KEY_RESULTS_LIST, resultsList.toTypedArray())
@@ -137,12 +140,28 @@ class ItemContainerActivity : FragmentActivity(), SensorEventListener {
             Sensor.TYPE_MAGNETIC_FIELD ->
                 System.arraycopy(event.values, 0, magnetometerReading, 0, magnetometerReading.size)
         }
-        if (!hasRoundStarted) {
-            startRoundIfCorrectOrientation()
-        } else if (waitForUpright) {
-            waitForUpright()
-        } else {
-            handleTilt()
+        SensorManager.getRotationMatrix(
+            rotationMatrix,
+            null,
+            accelerometerReading,
+            magnetometerReading
+        )
+        when (windowManager.defaultDisplay.rotation) {
+            ROTATION_90 -> SensorManager.remapCoordinateSystem(rotationMatrix,
+                SensorManager.AXIS_Y, SensorManager.AXIS_MINUS_X, rotationMatrixAdjusted)
+            ROTATION_270 -> SensorManager.remapCoordinateSystem(rotationMatrix,
+                SensorManager.AXIS_MINUS_Y, SensorManager.AXIS_X, rotationMatrixAdjusted)
+
+        }
+        SensorManager.getOrientation(rotationMatrixAdjusted, orientationAngles)
+        if (!blockSensor) {
+            if (!hasRoundStarted) {
+                startRoundIfCorrectOrientation()
+            } else if (waitForUpright) {
+                waitForUpright()
+            } else {
+                handleTilt()
+            }
         }
     }
 
@@ -159,17 +178,9 @@ class ItemContainerActivity : FragmentActivity(), SensorEventListener {
     }
 
     private fun handleTilt() {
-        SensorManager.getRotationMatrix(
-            rotationMatrix,
-            null,
-            accelerometerReading,
-            magnetometerReading
-        )
-        SensorManager.getOrientation(rotationMatrix, orientationAngles)
         boundLayout.apply {
-            if (orientationAngles[1] < 10.toRadians()
-                && orientationAngles[1] > (-10).toRadians()
-                && orientationAngles[2] > 130.toRadians()) {
+            if (orientationAngles[1] > (-60).toRadians()
+                && accelerometerReading[2] < 0) {
                 gameTimer.pause()
                 resultsList.add("${ResultsActivity.PREFIX_PASS}.${itemArray[itemViewpager.currentItem]}")
                 itemViewpager.handlePass()
@@ -177,9 +188,8 @@ class ItemContainerActivity : FragmentActivity(), SensorEventListener {
                 setOverlayText(R.string.pass)
                 waitForUpright = true
 
-            } else if (orientationAngles[1] < 10.toRadians()
-                && orientationAngles[1] > (-10).toRadians()
-                && orientationAngles[2] < 45.toRadians()) {
+            } else if (orientationAngles[1] > (-60).toRadians()
+                && accelerometerReading[2] > 0) {
                 gameTimer.pause()
                 resultsList.add("${ResultsActivity.PREFIX_FAIL}.${itemArray[itemViewpager.currentItem]}")
                 itemViewpager.handleFail()
@@ -192,7 +202,7 @@ class ItemContainerActivity : FragmentActivity(), SensorEventListener {
 
     private fun startRoundIfCorrectOrientation() {
         if (isUpright()) {
-            hasRoundStarted = true
+            blockSensor = true
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LOCKED
             setOverlayText(R.string.get_ready)
             countDownTimer.start()
@@ -200,20 +210,7 @@ class ItemContainerActivity : FragmentActivity(), SensorEventListener {
     }
 
     private fun isUpright(): Boolean {
-        SensorManager.getRotationMatrix(
-            rotationMatrix,
-            null,
-            accelerometerReading,
-            magnetometerReading
-        )
-        when (windowManager.defaultDisplay.rotation) {
-            ROTATION_90 -> SensorManager.remapCoordinateSystem(rotationMatrix,
-                SensorManager.AXIS_Y, SensorManager.AXIS_MINUS_X, rotationMatrixAdjusted)
 
-            ROTATION_270 -> SensorManager.remapCoordinateSystem(rotationMatrix,
-                SensorManager.AXIS_MINUS_Y, SensorManager.AXIS_X, rotationMatrixAdjusted)
-        }
-        SensorManager.getOrientation(rotationMatrixAdjusted, orientationAngles)
 
         return orientationAngles[1] > (-100).toRadians() && orientationAngles[1] < (-80).toRadians()
     }
