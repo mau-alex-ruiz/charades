@@ -23,7 +23,7 @@ class EditCategoryViewModelImpl(
     override fun init(categoryTitle: String, categoryList: List<String>) {
         this.originalTitle = categoryTitle
         this.currentTitle.set(categoryTitle)
-        this.currentList.set(categoryList.sorted().joinToString(separator = "\n"))
+        this.currentList.set(categoryList.joinToString(separator = "\n"))
     }
 
     override fun submitForm() {

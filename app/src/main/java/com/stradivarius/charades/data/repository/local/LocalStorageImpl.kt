@@ -19,8 +19,6 @@ class LocalStorageImpl(
 ) : LocalStorage {
 
     companion object {
-        const val KEY_CATEGORY = "category"
-        const val KEY_LIST = "list"
         const val CATEGORIES_FILE = "categories.json"
     }
 
@@ -71,7 +69,7 @@ class LocalStorageImpl(
 
     override fun addCategory(title: String, list: String): RepoStatus<Unit> {
         return try {
-            mainDto.categoriesMap[title] = list.split(',')
+            mainDto.categoriesMap[title] = list.formatListForJson(',')
             mainModel.postValue(MainModel(mainDto))
             writeJsonArrayToFile(mainDto.toJsonArray())
             RepoStatus.Success()
@@ -86,7 +84,7 @@ class LocalStorageImpl(
         val newMap = linkedMapOf<String, List<String>>()
         for ((title, currList) in mainDto.categoriesMap.toList()) {
             if (title == originalTitle) {
-                newMap[newTitle] = list.split("\n")
+                newMap[newTitle] = list.formatListForJson('\n')
             } else {
                 newMap[title] = currList
             }
@@ -120,6 +118,10 @@ class LocalStorageImpl(
             writer.write(json.toString())
             writer.close()
         }
+    }
+
+    private fun String.formatListForJson(delimiter: Char): List<String> {
+        return split(delimiter).map { it.trim() }.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) {it})
     }
 
 }
